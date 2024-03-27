@@ -10,9 +10,8 @@ public class Paint {
 
         for(int item : section){
             if(start + m > item){
-                continue;
+                continue; // 아래거 안타고 for 문 계속 돔.
             }
-
             start = item;
             answer++;
         }
@@ -21,9 +20,9 @@ public class Paint {
     }
 
     public static void main(String[] args) {
-        int n = 8;
+        int n = 5;
         int m = 4;
-        int[] section = {2,3,6};
+        int[] section = {1,3};
         solution(n,m,section);
     }
 }
