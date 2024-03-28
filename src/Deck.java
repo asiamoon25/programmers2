@@ -6,13 +6,7 @@ public class Deck {
         그러면 goal 을 돌리면서 card1, card2 덱을 한번 씩 사용해서
          */
         for(int i = 0; i < goal.length; i++){
-            for(int j = 0; j < cards1.length; j++){
 
-            }
-
-            for(int j =0; j < cards2.length; j++){
-
-            }
         }
         String answer = "";
         return answer;
