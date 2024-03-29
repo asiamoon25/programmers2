@@ -12,12 +12,12 @@ public class Deck {
         String answer ="Yes";
         List<String> list1 = new ArrayList<>(Arrays.asList(cards1));
         List<String> list2 = new ArrayList<>(Arrays.asList(cards2));
-        for(int i = 0; i < goal.length; i++){
-            if(list1.size() != 0 && goal[i].equals(list1.get(0))) {
+        for (String s : goal) {
+            if (list1.size() != 0 && s.equals(list1.get(0))) {
                 list1.remove(0);
-            }else if(list2.size() != 0 && goal[i].equals(list2.get(0))) {
+            } else if (list2.size() != 0 && s.equals(list2.get(0))) {
                 list2.remove(0);
-            }else{
+            } else {
                 answer = "No";
             }
         }
