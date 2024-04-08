@@ -2,9 +2,6 @@ import java.util.*;
 
 public class BestAlbum {
     public static int[] solution(String[] genres, int[] plays) {
-        int[] answer = {};
-
-        // 속한 노래가 많이 재생된 장르를 먼저 수록 -> Map 에 넣고 최대값 -> TreeMap
         TreeMap<String,Integer> bestGenre = new TreeMap<>();
         for(int i = 0; i < genres.length; i++){
             if(bestGenre.containsKey(genres[i])) {
@@ -15,17 +12,43 @@ public class BestAlbum {
                 bestGenre.put(genres[i], plays[i]);
             }
         }
-        // 이제 이렇게 하면 플레이 수가 낮은 대로 map 이 나옴.
+        String[] arr = new String[bestGenre.size()];
+        for(int i = 0; i < arr.length; i++){
+            arr[i] = bestGenre.pollLastEntry().getKey();
+        }
+        // ----------
+        Map<Integer, List<Integer>> map = new HashMap<>(); // Integer : genre 의 index, List : genre 에 대한 plays 의 index
+        for(int i = 0; i < arr.length; i++){
+            String genre = arr[i];
+            List<Integer> list = new ArrayList<>();
+            for(int j = 0; j < plays.length; j++){
+                if(genre.equals(genres[j])){
+                    list.add(j);
+                }
+            }
+            map.put(i,list);
+        }
 
-        // 마지막에서 하나씩 제거하면서 꺼내면...?
 
+        for(int i = 0; i < map.size(); i++) {
+            List<Integer> playsIndexes = map.get(i);
+            Collections.sort(playsIndexes, (o1,o2) -> plays[o2] - plays[o1]);
+            int play = plays[playsIndexes.get(0)]; // 최대값
+            for(int j = 0; j < playsIndexes.size(); j++){
+                if(play == plays[j]) {
+                    playsIndexes.set(0,0);
+                }
+            }
+            map.put(i, playsIndexes.subList(0,2));
+        }
 
-        // 장르 내에서 많이 재생된 노래를 먼저 수록 -> lastKey 를 뽑아서 genres 안에서 index 수 뽑기 -> list
+        List<Integer> result = new ArrayList<>();
 
-
-        // 장르 내에서 재생 횟수가 같은 노래 중에서는 고유 번호가 낮은 노래를 먼저 수록 ->
-
-
+        for(int i = 0; i < map.size(); i++){
+            result.addAll(map.get(i));
+        }
+        System.out.println(Arrays.toString(result.toArray()));
+        int[] answer = result.stream().mapToInt(i -> i).toArray();
         return answer;
     }
 
