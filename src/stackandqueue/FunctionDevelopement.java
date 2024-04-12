@@ -1,27 +1,63 @@
 package stackandqueue;
 
-public class FunctionDevelopement {
-    /*
-    각 기능은 진도가 100% 일때 서비스에 반영 가능
-    각 기능 개발속도는 모두 다름.
-    이때 뒤에 잇는 기능은 앞에 있는 기능이 배포 될 때 함께 배포됨. -> Queue<Map<Integer,Integer>>
 
-    먼저 배포되어야 하는 순서대로 작업의 진도가 적힌 정수 배열 progresses 와
-    각 작업의 개발 속도가 적힌 정수 배열 speeds 가 주어질 때 각 배포마다 몇 개의 기능이 배포
-    되는지를 return
-     */
+import java.util.*;
+
+/*
+프로그래머스 기능개발
+ */
+public class FunctionDevelopement {
     public static int[] solution(int[] progresses, int[] speeds){
 
+        Queue<Integer> timeTaken = new LinkedList<>();
+        for(int i = 0; i < progresses.length; i++){
+            int progress = progresses[i];
+            int speed = speeds[i];
+            int count = 0;
+            while(true){ // 하나의 과정이 끝나는 일 수
+                count++;
+                progress += speed;
+                if(progress >= 100){
+                    break;
+                }
+            }
+            timeTaken.add(count);
+        }
 
 
+        List<Integer> list = new ArrayList<>();
 
-        int[] answer = {};
+
+        int timeTakenSize = timeTaken.size();
+        for(int i = 0; i < timeTakenSize; i++) {
+            Integer first = timeTaken.peek();
+            int count = 0;
+            for(int j = 0; j < timeTakenSize; j++){
+                Integer second = timeTaken.peek();
+                if(second != null){
+                    if(first >= second) {
+                        count ++;
+                        timeTaken.poll();
+                        if(timeTaken.isEmpty()){
+                            break;
+                        }
+
+                    }else{
+                        break;
+                    }
+                }
+            }
+            list.add(count);
+        }
+        list.removeIf(n -> n == 0);
+
+        int[] answer = list.stream().mapToInt(Integer::intValue).toArray();
         return answer;
     }
 
     public static void main(String[] args) {
-        int[] progresses = {93,30,55};
-        int[] speeds = {1,30,5};
-        solution(progresses,speeds); //  2,1
+        int[] progresses = {93,30,55,25,34,55,10,70,75};
+        int[] speeds = {1,30,5,6,26,30,2,40,6};
+        solution(progresses,speeds); //  2,1,3,3
     }
 }
