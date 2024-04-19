@@ -17,8 +17,6 @@ public class Process {
         location 을 받아섯 해당 index 의 값을 찾아야됨.
         최대값을 뽑은 후 Queue 를 최대값의 index 아래로 순서대로 조정하면 됨.
          */
-
-
         Deque<int[]> q2 = new LinkedList<>();
         for(int i = 0; i < priorities.length; i++){
             q2.add(new int[]{i,priorities[i]});
@@ -30,36 +28,18 @@ public class Process {
         3 > 2 ? 3 1 2 2
         3 > 1 ? 3 2 2 1
          */
-
         int[] max = q2.pollFirst();
 
-        for(int i = 0; i <= q2.size()+1; i++){
-            int[] arr = q2.pollFirst();
-            if(max[1] > arr[1]) {
-                q2.addLast(arr);
-            }else if(max[1] <= arr[1]){
-                int[] temp = max;
-                max = arr;
-                q2.addLast(temp);
-            }
-        }
 
-        q2.addFirst(max);
-        int answer = 0;
-        int qSize = q2.size();
-        for(int i = 0; i < qSize; i++){
-            int[] arr = q2.pollFirst();
-            if(arr[0] == location){
-                answer = i+1;
-            }
-        }
 
-        return answer;
+        return 0;
     }
 
     public static void main(String[] args) {
-        int[] priorities = {1,1,9,1,1,1};
-        int location = 0; // 2번째 인덱스
+        int[] priorities = {2, 1, 3, 2};
+        int location = 2; // 2번째 인덱스
         solution(priorities,location);  // 1
     }
 }
+
+// 19 ~ 53 -> 1 + 20 + 3 = 24 분
