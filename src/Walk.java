@@ -24,33 +24,30 @@ public class Walk {
         }
 
 
-        for(int i = 0; i < routes.length; i++){
+        for (String route : routes) {
             int nw = sw;
             int nh = sh;
-            String direction = routes[i].split(" ")[0];
-            int distance = Integer.parseInt(routes[i].split(" ")[1]);
+            String direction = route.split(" ")[0];
+            int distance = Integer.parseInt(route.split(" ")[1]);
             int tempW = nw;
             int tempH = nh;
-            for(int j = 0; j < distance; j++){
-                if("E".equals(direction)){
+            for (int j = 0; j < distance; j++) {
+                if ("E".equals(direction)) {
                     nw += 1;
-                }else if ("W".equals(direction)) {
+                } else if ("W".equals(direction)) {
                     nw -= 1;
-                }else if ("N".equals(direction)){
+                } else if ("N".equals(direction)) {
                     nh -= 1;
-                }else if ("S".equals(direction)){
+                } else if ("S".equals(direction)) {
                     nh += 1;
                 }
 
-                boolean isPossible = false;
-                if(nw <= maxWidth && nh <= maxHeight && (nw >=0 && nh >=0)) {
-                    isPossible = true;
-                }
-                if(isPossible){
-                    if(arr[nh][nw] == 'X') {
+                boolean isPossible = nw <= maxWidth && nh <= maxHeight && (nw >= 0 && nh >= 0);
+                if (isPossible) {
+                    if (arr[nh][nw] == 'X') {
                         break;
                     }
-                    if(j == distance -1){
+                    if (j == distance - 1) {
                         sw = nw;
                         sh = nh;
                     }

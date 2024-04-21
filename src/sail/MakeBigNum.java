@@ -1,21 +1,37 @@
 package sail;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
 public class MakeBigNum {
 
     public static String solution(String number, int k) {
-        /*
-        어떤 숫자에서 k개의 수를 제거 했을 때 얻을 수 있는 가장 큰 숫자를 구하려함.
-        예를 들어, 숫자 1924에서 수 2개를 제거하면 [19,12,14,92,94,24] 를 만들 수 있음. 이 중 가장 큰 숫자는 94임.
-        문자열 형식으로 숫자 number 와 제거할 수의 개수 k가 주어지면 number 에서 k개의 수를 제거했을 때 만들 수 있는 수 중
-        가장 큰 숫자를 문자열 형태로 return 하도록 하라.
-         */
+        Stack<Character> stack = new Stack<>();
+        char[] result = new char[number.length() - k];
 
-        return "0";
+        for (int i = 0; i < number.length(); i++) {
+            char c = number.charAt(i);
+            // 스택이 비어있지 않고, k가 0보다 크며, 스택의 맨 위의 숫자가 현재 숫자보다 작으면
+            while (!stack.isEmpty() && k > 0 && stack.peek() < c) {
+                stack.pop(); // 스택에서 제거
+                k--; // 제거 카운트 감소
+            }
+            stack.push(c); // 현재 숫자 스택에 삽입
+        }
+
+        // 결과 배열을 만듦
+        for (int i = 0; i < result.length; i++) {
+            result[i] = stack.get(i);
+        }
+
+        return new String(result);
     }
 
     public static void main(String[] args) {
-        String number = "1924";
-        int k = 2;
-        solution(number,2);
+        String number = "1231234";
+        int k = 3;
+        solution(number,k);
     }
 }
