@@ -1,56 +1,100 @@
 package sail;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class TomAndJarry {
-    public static String[] solution(int n, int[] a){
+    public static String solution(){
 
         /*
         필요한 변수
         분자, 분모 저장할 수
          */
-        int first = a[a.length -1];
-        int firstBunja = 1;
-        for(int i = a.length -2; i >= 0; i--){
+        /*
+          변수 3개
+         */
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = 0;
+        try{
+            String nStr = br.readLine();
+            n = Integer.parseInt(nStr);
+            long[] arr = new long[n];
+            for(int i = 0; i < n; i++){
+                long inputLong = Long.parseLong(br.readLine());
+                arr[i] = inputLong;
+            }
+            long a = arr[arr.length-1];
+            long sangsu = 1;
+            long bunja = 0L;
+            long bunmo = 0L;
+            for(int i = arr.length-2; i >= 0; i--){
+                long b = arr[i];
 
-            int num = a[i]; // 원래 배열의 숫자
-            firstBunja = a[i] * first + firstBunja;
-            int bunmo = num;
+                bunmo = a;
+                bunja = a * b + sangsu;
 
-            int temp = 0;
+                long temp = 0L;
 
-            temp = firstBunja;
-            firstBunja = bunmo;
-            bunmo = temp;
+                temp = bunmo;
+
+                bunmo = bunja;
+                bunja = temp;
+                sangsu = bunja;
+                a = bunmo;
+            }
 
 
+            long last = bunmo - bunja;
 
-            System.out.println("분자 : " + firstBunja);
-            System.out.println("분모 : " + bunmo);
-            break;
+            String stArr = last+" "+bunmo;
+            return stArr;
+        }catch(IOException e) {
+            e.printStackTrace();
         }
-
         return null;
     }
-    
 
-    public static int[] yeonbunsoo(int a, int b) {
-
-        int boonmo = a*b + 1;
-        int boonja = b;
-
-        int[] arr = new int[2];
-
-        arr[0] = boonmo;
-        arr[1] = boonja;
-
-
-        return arr;
-    }
 
     public static void main(String[] args) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = 0;
+        try{
+            String nStr = br.readLine();
+            n = Integer.parseInt(nStr);
+            String[] ar = br.readLine().split(" ");
+            long[] arr = new long[n];
+            for(int i = 0; i < ar.length; i++){
+                long inputLong = Long.parseLong(ar[i]);
+                arr[i] = inputLong;
+            }
+            long a = arr[arr.length-1];
+            long sangsu = 1;
+            long bunja = 0L;
+            long bunmo = 0L;
+            for(int i = arr.length-2; i >= 0; i--){
+                long b = arr[i];
 
-        int n = 4;
-        int[] a = {2,7,1,8};
+                bunmo = a;
+                bunja = a * b + sangsu;
 
-        solution(4, a);
+                long temp = 0L;
+
+                temp = bunmo;
+
+                bunmo = bunja;
+                bunja = temp;
+                sangsu = bunja;
+                a = bunmo;
+            }
+
+
+            long last = bunmo - bunja;
+
+            String stArr = last+" "+bunmo;
+            System.out.println(stArr);
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 }
