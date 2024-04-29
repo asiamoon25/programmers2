@@ -23,8 +23,6 @@ public class TomAndJary {
 
         System.out.println("분자 : "+ bunja);
         System.out.println("분모 : "+ bunmo);
-
-
         return new int[]{bunmo, bunja};
     }
     public static void main(String[] args) {

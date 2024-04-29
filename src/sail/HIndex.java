@@ -27,27 +27,21 @@ public class HIndex {
      */
     public static int solution(int[] citations) {
         int answer = 0;
-        PriorityQueue<Integer> q = new PriorityQueue<>((o1, o2) -> o2-o1);
-        Stack<Integer> stack = new Stack<>();
+
+        /*
+        index 0  value 6 => 1편의 논문에서 인용된 횟수 6번 1 >= 6 ? false
+         */
+        Arrays.sort(citations);
 
         for(int i = 0; i < citations.length; i++){
-            q.add(citations[i]);
-        }
+            int h = citations.length - i;
 
-
-        for(int i = 0; i < q.size(); i++) {
-            if(!q.isEmpty()){
-                int a = q.poll(); // 6
-
-                stack.push(a); // 6
-                System.out.println(stack);
-                if(stack.size() >= a && q.size() <= a){
-                    System.out.println(a);
-                    answer = a;
-                    break;
-                }
+            if(citations[i] >= h) {
+                answer = h;
+                break;
             }
         }
+
         return answer;
     }
 
