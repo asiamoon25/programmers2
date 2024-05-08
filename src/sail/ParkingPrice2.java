@@ -8,79 +8,69 @@ public class ParkingPrice2 {
         기본 시간(분), 기본 요금(원), 단위 시간(분), 단위 요금(원) 이 주어지고 시각, 차번호, 입출입 기록 이 주어질 때 차량별 주차요금 계산
         IN 일 때 23:59 에 출차된걸로 간주
          */
-
-        int[] answer = {};
-
-        int defaultMinute = fees[0];
-        int defaultPrice = fees[1];
-        int perMinute = fees[2];
-        int perPrice = fees[3];
-
-        Map<String, Integer> inStatus = new HashMap<>();
-        Map<String, Integer> outStatus = new HashMap<>();
-        for(String record : records){
-            String[] arr = record.split(" ");
-            String carNumber = arr[1];
-            String status = arr[2];
-
-
-            if(status.equals("IN")) {
-                inStatus.put(carNumber, inStatus.getOrDefault(carNumber,0) + 1);
-            }else{
-                outStatus.put(carNumber, outStatus.getOrDefault(carNumber,0) + 1);
-            }
-        }
-
         Map<String,Integer> map = new HashMap<>();
-        Map<String,Integer> map2 = new HashMap<>();
+        Map<String, Integer> feeMap = new HashMap<>();
+
         for(String record : records) {
             String[] arr = record.split(" ");
             String carNumber = arr[1];
+            map.put(carNumber, map.getOrDefault(carNumber,0) + 1);
+        }
+
+        for(String record : records) {
+            String[] arr = record.split(" ");
+            String timeStr = arr[0];
+            String carNumber = arr[1];
             String status = arr[2];
-            int totalMinute = Integer.parseInt(arr[0].split(":")[0])* 60 + Integer.parseInt(arr[0].split(":")[1]);
 
-            if(status.equals("IN")){
-                if(inStatus.containsKey(carNumber)) {
-                    map.put(carNumber, map.getOrDefault(carNumber,0)+totalMinute);
-                }
+            int time = Integer.parseInt(timeStr.split(":")[0]) * 60 + Integer.parseInt(timeStr.split(":")[1]);
+            int countByCarNumber = map.get(carNumber);
+
+            if(countByCarNumber % 2 != 0) {
+                int time2 = 23*60 + 59;
+                map.put(carNumber, map.getOrDefault(carNumber,0) + 1);
+                feeMap.put(carNumber, feeMap.getOrDefault(carNumber, 0) - time2);
+            }
+
+
+            if("IN".equals(status)){
+                feeMap.put(carNumber, feeMap.getOrDefault(carNumber,0) + time);
             }else{
-                if(outStatus.containsKey(carNumber)){
-                    int plusTime = 0;
-                    if(inStatus.get(carNumber) > outStatus.get(carNumber)){
-                        plusTime = 23*60 + 59;
-                    }
-                    map2.put(carNumber, map2.getOrDefault(carNumber,0)+totalMinute + plusTime);
-                }
+                feeMap.put(carNumber, feeMap.getOrDefault(carNumber,0) - time);
             }
         }
-        System.out.println(map.toString());
-        System.out.println(map2.toString());
-        List<String> keySet = new ArrayList<>(map.keySet());
-        Collections.sort(keySet);
-        List<Integer> result = new ArrayList<>();
-        // 180, 5000, 10, 600
-        for(String carNumber : keySet) {
 
+        int defaultMinute = fees[0];
+        int defaultPrice = fees[1];
+        int overMinute = fees[2];
+        int perMinute = fees[3];
 
-            int totalTime = map2.get(carNumber) - map.get(carNumber);
-            int overTime = 0;
-            if(totalTime > defaultMinute){
-                overTime = (totalTime - defaultMinute) % perMinute  == 0? (totalTime - defaultMinute) / perMinute : (totalTime - defaultMinute) / perMinute + 1;
+        int[] answer = {};
+        List<Integer> list = new ArrayList<>();
+        List<String> carNumbers = new ArrayList<>(feeMap.keySet());
+        Collections.sort(carNumbers);
+        for(String carNumber : carNumbers) {
+            int totalTime = feeMap.get(carNumber) < 0 ? feeMap.get(carNumber) * -1 : feeMap.get(carNumber);
+
+            int overTime = (totalTime - defaultMinute) % overMinute == 0 ? (totalTime - defaultMinute)/overMinute : (totalTime - defaultMinute)/overMinute + 1;
+            int price = defaultPrice + overTime * perMinute;
+            if(totalTime - defaultMinute <= 0) {
+                price = defaultPrice;
             }
 
-            int won = defaultPrice + (overTime) * perPrice;
-
-            result.add(won);
-
+            list.add(price);
         }
-        answer = result.stream().mapToInt(Integer::intValue).toArray();
+        answer = list.stream().mapToInt(Integer::intValue).toArray();
+
+        System.out.println(Arrays.toString(answer));
+
         return answer;
     }
 
     public static void main(String[] args) {
-        int[] fees ={1, 461, 1, 10}; // 기본 시간 (분), 기본 요금(원), 단위 시간(분), 단위 요금(원)
+        int[] fees ={180, 5000, 10, 600}; // 기본 시간 (분), 기본 요금(원), 단위 시간(분), 단위 요금(원)
         String[] records = { // 시각(시 : 분), 차량 번호, 내역
-                "00:00 1234 IN"
+                "05:34 5961 IN", "06:00 0000 IN", "06:34 0000 OUT", "07:59 5961 OUT", "07:59 0148 IN", "18:59 0000 IN", "19:09 0148 OUT", "22:59 5961 IN", "23:00 5961 OUT"
         };
 
         solution(fees,records); // {14600, 34400, 5000}
