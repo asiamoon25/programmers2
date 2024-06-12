@@ -43,7 +43,7 @@ public class PrimeNumber {
         a : 10 → 17
         a : 30 → 129
          */
-        int a = 5;
+        int a = 30;
         System.out.println(solution(a));
     }
 }
